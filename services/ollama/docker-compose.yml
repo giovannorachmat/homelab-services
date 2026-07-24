@@ -19,11 +19,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.5"
-          memory: 256M
+          cpus: "2"
+          memory: 4G
         reservations:
-          cpus: "0.5"
-          memory: 256M
+          cpus: "2"
+          memory: 4G
 
 networks:
   private-net:
