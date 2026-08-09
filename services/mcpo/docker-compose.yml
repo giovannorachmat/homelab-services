@@ -1,0 +1,30 @@
+services:
+  mcpo:
+    container_name: mcpo
+    image: ghcr.io/open-webui/mcpo:latest
+
+    ports:
+      - "8000:8000"
+
+    env_file:
+      - ../../runtime/mcpo/.env
+
+    volumes:
+      - ../../runtime/mcpo/config.json:/app/config.json
+      - ../../runtime/mcpo/data:/app/data
+
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 250M
+        reservations:
+          cpus: "0.5"
+          memory: 250M
+
+    networks:
+      - private-net
+
+networks:
+  private-net:
+    external: true
