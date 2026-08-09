@@ -8,9 +8,12 @@ services:
       - ../../runtime/open-terminal/.env
 
     environment:
-      TZ: "Asia/Jakarta"
       OPEN_TERMINAL_MAX_SESSIONS: 8
       OPEN_TERMINAL_EXECUTE_TIMEOUT: 30
+      TZ: "Asia/Jakarta"
+
+    ports:
+      - 8000:8000
 
     volumes:
       - ../../runtime/open-terminal/data:/home/user
