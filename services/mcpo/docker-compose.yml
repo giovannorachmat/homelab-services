@@ -7,8 +7,12 @@ services:
     env_file:
       - ../../runtime/mcpo/.env
 
+    environment:
+      HOME: /app/data
+      UV_CACHE_DIR: /app/data/uv-cache
+
     volumes:
-      - ../../runtime/mcpo/config.json:/app/config.json
+      - ../../runtime/mcpo/config.json:/app/config.json:ro
       - ../../runtime/mcpo/data:/app/data
 
     command: >
