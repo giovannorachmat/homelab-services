@@ -15,9 +15,10 @@ services:
       - ../../runtime/mcpo/config.json:/app/config.json:ro
       - ../../runtime/mcpo/data:/app/data
 
-    command: >
-      --config /app/config.json
-      --hot-reload
+    command:
+      - --config
+      - /app/config.json
+      - --hot-reload
 
     networks:
       - private-net
