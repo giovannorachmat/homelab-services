@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "time": {
+      "command": "uvx",
+      "args": [
+        "--with",
+        "mcp<2.0.0",
+        "mcp-server-time",
+        "--local-timezone=Asia/Jakarta"
+      ]
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ]
+    }
+  }
+}

@@ -1,14 +1,14 @@
 services:
-  n8n:
-    container_name: n8n
-    image: docker.n8n.io/n8nio/n8n
+  ytzero:
+    container_name: ytzero
+    image: ghcr.io/pelski/ytzero:latest
     restart: unless-stopped
 
     ports:
-      - "5678:5678"
+      - "3001:3001"
 
     volumes:
-      - ../../runtime/n8n/data:/home/node/.n8n
+      - ../../runtime/ytzero/data:/data
 
     networks:
       - private-net
@@ -17,10 +17,10 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: 1G
+          memory: 4G
         reservations:
           cpus: "0.5"
-          memory: 512M
+          memory: 2G
 
 networks:
   private-net:

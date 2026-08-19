@@ -1,0 +1,37 @@
+services:
+  mcpo:
+    container_name: mcpo
+    image: ghcr.io/open-webui/mcpo:main
+    restart: unless-stopped
+
+    env_file:
+      - ../../runtime/mcpo/.env
+
+    environment:
+      HOME: /app/data
+      UV_CACHE_DIR: /app/data/uv-cache
+
+    volumes:
+      - ../../runtime/mcpo/config.json:/app/config.json:ro
+      - ../../runtime/mcpo/data:/app/data
+
+    command:
+      - --config
+      - /app/config.json
+      - --hot-reload
+
+    networks:
+      - private-net
+
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 250M
+        reservations:
+          cpus: "0.5"
+          memory: 250M
+
+networks:
+  private-net:
+    external: true

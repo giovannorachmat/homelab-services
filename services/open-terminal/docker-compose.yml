@@ -1,0 +1,36 @@
+services:
+  open-terminal:
+    container_name: open-terminal
+    image: ghcr.io/open-webui/open-terminal:latest
+    restart: unless-stopped
+
+    env_file:
+      - ../../runtime/open-terminal/.env
+
+    environment:
+      OPEN_TERMINAL_MAX_SESSIONS: 8
+      OPEN_TERMINAL_EXECUTE_TIMEOUT: 30
+      TZ: "Asia/Jakarta"
+
+    ports:
+      - 8000:8000
+
+    volumes:
+      - ../../runtime/open-terminal/data:/home/user
+      - ../../runtime/open-terminal/pip-cache:/home/user/.pip-cache
+
+    networks:
+      - private-net
+
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 4G
+        reservations:
+          cpus: "1"
+          memory: 1G
+
+networks:
+  private-net:
+    external: true

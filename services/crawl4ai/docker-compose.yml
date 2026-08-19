@@ -24,7 +24,7 @@ services:
 
   crawl4ai-proxy:
     container_name: crawl4ai-proxy
-    build: ./proxy
+    build: ../../../../repo/crawl4ai-proxy
     restart: unless-stopped
 
     env_file:
