@@ -2,7 +2,7 @@
 
 ## Repo shape
 - Docker Compose homelab, not an app monorepo: `services/*/docker-compose.yml` defines containers; `runtime/` holds persistent/private state.
-- Treat compose files as the source of truth when README status/ports/resource numbers disagree; README service table is stale relative to `services/`.
+- Treat compose files as the source of truth when README status/ports/resource numbers disagree (README table is hand-maintained).
 - Most services join the external Docker network `private-net`; missing the top-level `networks: private-net: external: true` creates an isolated network and breaks container-name routing.
 - Compose service keys differ from container names in a few places: npm's service key is `app` (container `npm`), and monitoring containers carry `-c` suffixes (`prometheus-c`, `grafana-c`, ...). `docker compose` commands use the service key; NPM proxy hosts use container names.
 - Open WebUI expects an `ollama` container on `private-net` (`OLLAMA_BASE_URL=http://ollama:11434`), but there is no `services/ollama` compose; only `runtime/ollama/.env` exists here.
@@ -22,6 +22,7 @@
 - NPM is the production reverse proxy on host ports 80/443/81; proxy hosts must forward to container names and container ports, not host-mapped ports.
 - `services/9router` builds from sibling repo `../../../9router/`; `services/crawl4ai` builds `crawl4ai-proxy` from `../../../../repo/crawl4ai-proxy` (paths relative to the compose file; both live outside this repo).
 - Every service defines `deploy.resources` limits/reservations; follow this pattern for new services (32GB RAM mini PC host).
+- Most images float on `:latest`/`main` tags; a re-pull can silently jump major versions (2026-08-29: tika `latest` 3.3.1→4.0.0 crash-looped with the old entrypoint stuck on the new image). After an image update, `docker compose up -d` can be a no-op because the config-hash still matches — fix with `up -d --force-recreate`.
 - Docker `env_file` reads quotes literally; avoid quoting simple values in `.env`, especially semicolon-separated provider lists.
 - Monitoring has both tracked config under `services/monitoring/config/` and runtime config under `runtime/monitoring/config/`; check the compose mounts before editing the wrong copy. Its promtail still mounts `runtime/airflow-docker/logs` and `runtime/vault/logs`, which no longer exist (leftovers from removed services).
 - Syncthing is the one exception to the `runtime/` data convention: its data mount is the absolute host path `/home/giografi/syncthing` → `/data`. Folder paths set in the Syncthing GUI must be container paths (`/data/<name>`) to land in `~/syncthing`; host paths like `/home/giografi/...` fail inside the container. Adding a folder never requires editing the compose file.
