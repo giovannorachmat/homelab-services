@@ -22,8 +22,8 @@ Everything runs on a single machine behind a Cloudflare DNS, accessible from any
 | ------------------ | --------------------------------------------------------------------- | ---------------------------- | ---------------- | ------------------------ | ------------- |
 | **9router**        | build `../../../9router/`                                             | 20128                        | 0.75 / 500M      | API routing & proxy      | ✅ Running    |
 | **AdGuardHome**    | `adguard/adguardhome:latest`                                          | 53 TCP/UDP, 8080→80          | 0.5 / 250M       | DNS ad-blocker           | ✅ Running    |
-| **Arcane**         | `ghcr.io/getarcaneapp/manager:latest`                                 | 3552                         | 0.5 / 1G         | Docker management UI     | ✅ Running    |
-| **crawl4ai**       | `unclecode/crawl4ai:latest` + build `../../../../repo/crawl4ai-proxy` | internal only                | 1.5 / 2.25G      | Web crawling + proxy     | ✅ Running    |
+| **Arcane**         | `ghcr.io/getarcaneapp/manager:latest`                                 | 3552                         | 0.5 / 2G         | Docker management UI     | ✅ Running    |
+| **crawl4ai**       | `unclecode/crawl4ai:latest` + build `../../../../repo/crawl4ai-proxy` | internal only                | 1/2G + 0.5/250M (proxy) | Web crawling + proxy     | ✅ Running    |
 | **Drawio**         | `jgraph/drawio`                                                       | internal only                | 0.5 / 256M       | Diagramming tool         | Defined       |
 | **Floci**          | `floci/floci:latest`                                                  | 4566                         | 0.5 / 256M       | Local AWS emulator       | Defined       |
 | **Headroom Proxy** | `ghcr.io/chopratejas/headroom:latest`                                 | 8787                         | 0.5 / 250M       | Headroom optimizer proxy | Defined       |
@@ -31,8 +31,12 @@ Everything runs on a single machine behind a Cloudflare DNS, accessible from any
 | **Monitoring**     | Prometheus, Loki, Promtail, Grafana, Node Exporter                    | 3030, 9090, 9091, 9100, 3100 | 2 / 2.5G         | Metrics + logs           | Defined       |
 | **NPM**            | `jc21/nginx-proxy-manager:2.15.1`                                     | 80, 81, 443                  | 0.5 / 250M       | Reverse proxy + SSL      | ✅ Running    |
 | **Open Terminal**  | `ghcr.io/open-webui/open-terminal:latest`                             | 8000                         | 2 / 4G           | Browser terminal backend | ✅ Running    |
-| **Open WebUI**     | `ghcr.io/open-webui/open-webui:main-slim`                             | internal only                | 1 / 2G           | Chat interface for LLMs  | ✅ Running    |
+| **Open WebUI**     | `ghcr.io/open-webui/open-webui:main-slim`                             | internal only                | 2 / 4G           | Chat interface for LLMs  | ✅ Running    |
+| **Syncthing**      | `lscr.io/linuxserver/syncthing:latest`                                | 8384, 22000 TCP/UDP, 21027 UDP | 0.5 / 1G       | File synchronization     | ✅ Running    |
 | **Tika**           | `apache/tika:latest`                                                  | 9998                         | 1 / 2G           | Content extraction       | ✅ Running    |
+| **YTZero**         | `ghcr.io/pelski/ytzero:latest`                                        | 3001                         | 1 / 4G           | YouTube media downloader | ✅ Running    |
+
+> **Note:** Syncthing is the exception to the `runtime/` data convention — its data lives at the absolute host path `/home/giografi/syncthing` (mounted as `/data` inside the container). Folder paths in the Syncthing GUI must be container paths (`/data/<name>`), not host paths.
 
 ## Networking
 
@@ -210,4 +214,14 @@ networks:
 
 ---
 
-_Last updated: 2026-08-09_
+### 8. Syncthing folder error ("folder path missing" / "permission denied")
+
+**Symptom:** Shared folder stays in error state; logs show `Failed to create folder root directory` or `mkdir /home/giografi: permission denied`.
+
+**Cause:** The folder path is set to a host path (e.g., `/home/giografi/...`), but Syncthing resolves paths inside the container, where the host data dir is mounted at `/data`.
+
+**Fix:** Set the folder path to `/data/<name>` in the GUI. It lands in `/home/giografi/syncthing/<name>` on the host. No compose changes are needed when adding folders.
+
+---
+
+_Last updated: 2026-08-29_
