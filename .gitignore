@@ -7,6 +7,7 @@ runtime/**/data/
 runtime/**/conf/
 runtime/**/work/
 runtime/**/letsencrypt/
+runtime/syncthing/config/
 runtime/certs/
 
 # Docker
