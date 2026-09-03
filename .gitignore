@@ -9,6 +9,10 @@ runtime/**/work/
 runtime/**/letsencrypt/
 runtime/syncthing/config/
 runtime/certs/
+runtime/paperless/media/
+runtime/paperless/consume/
+runtime/paperless/export/
+runtime/paperless/redis/
 
 # Docker
 .docker/

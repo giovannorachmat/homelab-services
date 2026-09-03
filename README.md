@@ -32,6 +32,7 @@ Everything runs on a single machine behind a Cloudflare DNS, accessible from any
 | **NPM**            | `jc21/nginx-proxy-manager:2.15.1`                                     | 80, 81, 443                  | 0.5 / 250M       | Reverse proxy + SSL      | ✅ Running    |
 | **Open Terminal**  | `ghcr.io/open-webui/open-terminal:latest`                             | 8000                         | 2 / 4G           | Browser terminal backend | ✅ Running    |
 | **Open WebUI**     | `ghcr.io/open-webui/open-webui:main-slim`                             | internal only                | 2 / 4G           | Chat interface for LLMs  | ✅ Running    |
+| **Paperless**      | `ghcr.io/paperless-ngx/paperless-ngx` + valkey + gotenberg            | 8000                         | 1.75 / 2.6G      | Document management      | Defined       |
 | **Syncthing**      | `lscr.io/linuxserver/syncthing:latest`                                | 8384, 22000 TCP/UDP, 21027 UDP | 0.5 / 1G       | File synchronization     | ✅ Running    |
 | **Tika**           | `apache/tika:latest`                                                  | 9998                         | 1 / 2G           | Content extraction       | ✅ Running    |
 | **YTZero**         | `ghcr.io/pelski/ytzero:latest`                                        | 3001                         | 1 / 4G           | YouTube media downloader | ✅ Running    |

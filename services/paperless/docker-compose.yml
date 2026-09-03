@@ -1,0 +1,95 @@
+services:
+  webserver:
+    container_name: paperless
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    restart: unless-stopped
+
+    depends_on:
+      - paperless-broker
+      - paperless-gotenberg
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - ../../runtime/paperless/data:/usr/src/paperless/data
+      - ../../runtime/paperless/media:/usr/src/paperless/media
+      - ../../runtime/paperless/export:/usr/src/paperless/export
+      - ../../runtime/paperless/consume:/usr/src/paperless/consume
+
+    env_file:
+      - ../../runtime/paperless/.env
+
+    environment:
+      PAPERLESS_REDIS: redis://paperless-broker:6379
+      PAPERLESS_DBENGINE: sqlite
+      PAPERLESS_TIKA_ENABLED: 1
+      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://paperless-gotenberg:3000
+      PAPERLESS_TIKA_ENDPOINT: http://tika:9998
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000 || exit 1"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+    networks:
+      - private-net
+
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 2G
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+
+  paperless-broker:
+    container_name: paperless-broker
+    image: docker.io/valkey/valkey:9-alpine
+    restart: unless-stopped
+
+    volumes:
+      - ../../runtime/paperless/redis:/data
+
+    networks:
+      - private-net
+
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+        reservations:
+          cpus: "0.25"
+          memory: 64M
+
+  paperless-gotenberg:
+    container_name: paperless-gotenberg
+    image: docker.io/gotenberg/gotenberg:8.34
+    restart: unless-stopped
+
+    # The chromium route is used to convert .eml files. External content like
+    # tracking pixels and javascript is blocked on purpose.
+    command:
+      - "gotenberg"
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=file:///tmp/.*"
+
+    networks:
+      - private-net
+
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+
+networks:
+  private-net:
+    external: true
