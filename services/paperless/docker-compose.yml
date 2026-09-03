@@ -26,6 +26,14 @@ services:
       PAPERLESS_TIKA_ENABLED: 1
       PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://paperless-gotenberg:3000
       PAPERLESS_TIKA_ENDPOINT: http://tika:9998
+      PAPERLESS_AI_ENABLED: "yes"
+      PAPERLESS_AI_LLM_BACKEND: ollama
+      PAPERLESS_AI_LLM_ENDPOINT: http://ollama:11434
+      PAPERLESS_AI_LLM_MODEL: qwen3-5-9b
+      PAPERLESS_AI_LLM_ALLOW_INTERNAL_ENDPOINTS: "true"
+      PAPERLESS_AI_LLM_CONTEXT_SIZE: 4096
+      PAPERLESS_AI_LLM_REQUEST_TIMEOUT: 600
+      PAPERLESS_AI_LLM_EMBEDDING_BACKEND: huggingface
 
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8000 || exit 1"]
