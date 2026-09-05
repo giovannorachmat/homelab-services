@@ -31,6 +31,7 @@ Everything runs on a single machine behind a Cloudflare DNS, accessible from any
 | **Monitoring**     | Prometheus, Loki, Promtail, Grafana, Node Exporter                    | 3030, 9090, 9091, 9100, 3100 | 2 / 2.5G         | Metrics + logs           | Defined       |
 | **NPM**            | `jc21/nginx-proxy-manager:2.15.1`                                     | 80, 81, 443                  | 0.5 / 250M       | Reverse proxy + SSL      | ✅ Running    |
 | **Open Terminal**  | `ghcr.io/open-webui/open-terminal:latest`                             | 8000                         | 2 / 4G           | Browser terminal backend | ✅ Running    |
+| **Ollama**         | `ollama/ollama:latest`                                                | 11434                        | 6 / 12G          | Local LLM server (GGUFs) | Defined       |
 | **Open WebUI**     | `ghcr.io/open-webui/open-webui:main-slim`                             | internal only                | 2 / 4G           | Chat interface for LLMs  | ✅ Running    |
 | **Paperless**      | `ghcr.io/paperless-ngx/paperless-ngx` + valkey + gotenberg            | 8000                         | 1.75 / 2.6G      | Document management      | Defined       |
 | **Syncthing**      | `lscr.io/linuxserver/syncthing:latest`                                | 8384, 22000 TCP/UDP, 21027 UDP | 0.5 / 1G       | File synchronization     | ✅ Running    |
